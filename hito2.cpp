@@ -236,6 +236,7 @@ int main()
     qt.insertar(Point(7, 6));
     qt.insertar(Point(2, 3));
     qt.insertar(Point(-2, -3));
+    qt.insertar(Point(-8, 0));
 
     qt.imprimir();
 
@@ -244,7 +245,7 @@ int main()
     qt.eliminar(Point(7, 6));
     qt.imprimir();
 
-    Rect areaConsulta(0, 0, 1, 1);
+    Rect areaConsulta(-10, 0, 2, 1);
     vector<Point> resultados;
 
     qt.buscarEnRango(areaConsulta, resultados);
