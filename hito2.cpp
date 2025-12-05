@@ -244,7 +244,7 @@ int main()
     qt.eliminar(Point(7, 6));
     qt.imprimir();
 
-    Rect areaConsulta(0, 0, 4, 4);
+    Rect areaConsulta(0, 0, 1, 1);
     vector<Point> resultados;
 
     qt.buscarEnRango(areaConsulta, resultados);
