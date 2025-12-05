@@ -21,6 +21,14 @@ struct Rect
         return (p.x >= x - w && p.x <= x + w &&
                 p.y >= y - h && p.y <= y + h);
     }
+
+    bool intersects(const Rect &other) const
+    {
+        return !(other.x - other.w > x + w ||
+                 other.x + other.w < x - w ||
+                 other.y - other.h > y + h ||
+                 other.y + other.h < y - h);
+    }
 };
 
 class Quadtree
@@ -32,10 +40,7 @@ private:
     vector<Point> puntos;
 
     bool dividido;
-    Quadtree *noroeste;
-    Quadtree *noreste;
-    Quadtree *suroeste;
-    Quadtree *sureste;
+    Quadtree *noroeste, *noreste, *suroeste, *sureste;
 
 public:
     Quadtree(const Rect &region)
@@ -166,6 +171,29 @@ public:
         return true;
     }
 
+    void buscarEnRango(const Rect &range, vector<Point> &encontrados) const
+    {
+
+        if (!boundary.intersects(range))
+            return;
+
+        for (const Point &p : puntos)
+        {
+            if (range.contains(p))
+            {
+                encontrados.push_back(p);
+            }
+        }
+
+        if (dividido)
+        {
+            noroeste->buscarEnRango(range, encontrados);
+            noreste->buscarEnRango(range, encontrados);
+            suroeste->buscarEnRango(range, encontrados);
+            sureste->buscarEnRango(range, encontrados);
+        }
+    }
+
     void imprimir(int nivel = 0) const
     {
         string indent(nivel * 2, ' ');
@@ -215,5 +243,15 @@ int main()
     qt.eliminar(Point(3, 3));
     qt.eliminar(Point(7, 6));
     qt.imprimir();
+
+    Rect areaConsulta(0, 0, 4, 4);
+    vector<Point> resultados;
+
+    qt.buscarEnRango(areaConsulta, resultados);
+
+    cout << "\nPuntos encontrados:\n";
+    for (auto &p : resultados)
+        cout << "(" << p.x << ", " << p.y << ")\n";
+
     return 0;
 }
